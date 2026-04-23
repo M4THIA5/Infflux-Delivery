@@ -44,7 +44,7 @@ export class CoursesController {
 
   @Get('mine')
   findMine(@CurrentUser() user: User) {
-    return this.coursesService.findMine(user.id);
+    return this.coursesService.findMine(user);
   }
 
   @Get('nearby')
@@ -78,6 +78,13 @@ export class CoursesController {
   @Post(':id/accept')
   accept(@Param('id') id: string, @Body() dto: AcceptCourseDto) {
     return this.coursesService.accept(id, dto.delivererId);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.CUSTOMER)
+  @Post(':id/confirm')
+  confirm(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.coursesService.confirmByCustomer(id, user.id);
   }
 
   @Post(':id/refuse')

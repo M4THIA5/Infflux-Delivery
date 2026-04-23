@@ -10,6 +10,7 @@ import { IsNull, Repository } from 'typeorm';
 import { Course } from './course.entity';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { User, UserRole } from '../users/user.entity';
 
 @Injectable()
 export class CoursesService {
@@ -31,6 +32,7 @@ export class CoursesService {
       dateHeureArrivee: dto.dateHeureArrivee
         ? new Date(dto.dateHeureArrivee)
         : null,
+      remorque: dto.remorque ?? 'MEDIUM',
     });
     return this.coursesRepository.save(course);
   }
@@ -94,20 +96,60 @@ export class CoursesService {
     return this.coursesRepository.save(course);
   }
 
+  async confirmByCustomer(id: string, customerId: string): Promise<Course> {
+    const course = await this.findOne(id);
+
+    if (course.customerId !== customerId) {
+      throw new ForbiddenException(
+        'Vous ne pouvez confirmer que vos propres livraisons',
+      );
+    }
+
+    const isInProgress = !!course.delivererId && !course.dateHeureArrivee;
+
+    if (!isInProgress) {
+      throw new BadRequestException(
+        'Seules les livraisons en cours peuvent etre confirmees',
+      );
+    }
+
+    course.dateHeureArrivee = new Date();
+    course.status = 'COMPLETED';
+
+    return this.coursesRepository.save(course);
+  }
+
   findPending(): Promise<Course[]> {
     return this.coursesRepository.find({ where: { delivererId: IsNull() } });
   }
 
-  async findMine(userId: string): Promise<{
-    active: Course | null;
-    history: Course[];
-  }> {
+  async findMine(
+    user: User,
+  ): Promise<
+    | Course[]
+    | {
+        active: Course | null;
+        history: Course[];
+      }
+  > {
+    if (user.role === UserRole.CUSTOMER) {
+      return this.coursesRepository.find({
+        where: { customerId: user.id },
+        relations: ['customer', 'deliverer', 'entrepot'],
+        order: { createdAt: 'DESC' },
+      });
+    }
+
+    if (user.role === UserRole.ADMIN) {
+      return this.findAll();
+    }
+
     const courses = await this.coursesRepository
       .createQueryBuilder('course')
       .leftJoinAndSelect('course.customer', 'customer')
       .leftJoinAndSelect('course.deliverer', 'deliverer')
       .leftJoinAndSelect('course.entrepot', 'entrepot')
-      .where('course."delivererId" = :userId', { userId })
+      .where('course."delivererId" = :userId', { userId: user.id })
       .orderBy('course."createdAt"', 'DESC')
       .getMany();
 

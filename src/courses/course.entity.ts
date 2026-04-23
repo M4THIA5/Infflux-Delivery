@@ -62,7 +62,11 @@ export class Course {
   @Column({ type: 'int', nullable: true })
   note: number | null;
 
-  @Column({ type: 'enum', enum: ['SMALL', 'MEDIUM', 'LARGE', 'REFRIGERATED'] })
+  @Column({
+    type: 'enum',
+    enum: ['SMALL', 'MEDIUM', 'LARGE', 'REFRIGERATED'],
+    default: 'MEDIUM',
+  })
   remorque: 'SMALL' | 'MEDIUM' | 'LARGE' | 'REFRIGERATED';
 
   @ManyToOne(() => User, (user) => user.customerCourses)

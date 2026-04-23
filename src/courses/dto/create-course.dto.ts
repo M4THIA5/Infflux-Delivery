@@ -58,8 +58,9 @@ export class CreateCourseDto {
   @IsBoolean()
   isLegal?: boolean;
 
+  @IsOptional()
   @IsEnum(['SMALL', 'MEDIUM', 'LARGE', 'REFRIGERATED'])
-  remorque: RemorqueType;
+  remorque?: RemorqueType;
 
   @IsOptional()
   @IsInt()
