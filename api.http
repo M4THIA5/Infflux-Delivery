@@ -1,0 +1,92 @@
+@baseUrl = http://localhost:3000
+@token =
+
+### Login admin
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@infflux.dev",
+  "password": "admin123"
+}
+
+### Créer un compte
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@test.dev",
+  "password": "password123",
+  "role": "CUSTOMER"
+}
+
+###
+
+### Créer un entrepôt
+POST {{baseUrl}}/entrepots
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "addresse": "12 Rue de la Logistique, 69000 Lyon",
+  "latitude": 45.7640,
+  "longitude": 4.8357
+}
+
+### Lister les entrepôts
+GET {{baseUrl}}/entrepots
+Authorization: Bearer {{token}}
+
+###
+
+### Créer une course
+POST {{baseUrl}}/courses
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "dateHeureDebut": "2026-04-25T08:00:00.000Z",
+  "prix": 120.50,
+  "adresseLivraison": "25 Rue du Commerce, 69002 Lyon",
+  "customerId": "789fa53b-50cf-4268-a3e0-8168b6a4b5ba",
+  "entrepotId": "REMPLACE_PAR_ENTREPOT_ID",
+  "remorque": "MEDIUM",
+  "isLegal": true
+}
+
+### Lister toutes les courses (admin)
+GET {{baseUrl}}/courses
+Authorization: Bearer {{token}}
+
+### Mes courses
+GET {{baseUrl}}/courses/mine
+Authorization: Bearer {{token}}
+
+### Courses proches
+GET {{baseUrl}}/courses/nearby?lat=45.7640&lng=4.8357&radius=10000
+Authorization: Bearer {{token}}
+
+### Accepter une course
+POST {{baseUrl}}/courses/REMPLACE_PAR_COURSE_ID/accept
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "delivererId": "REMPLACE_PAR_DELIVERER_ID"
+}
+
+### Supprimer une course
+DELETE {{baseUrl}}/courses/REMPLACE_PAR_COURSE_ID
+Authorization: Bearer {{token}}
+
+###
+
+### Lister les users
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Lister les livreurs
+GET {{baseUrl}}/users?role=DELIVER
+Authorization: Bearer {{token}}
