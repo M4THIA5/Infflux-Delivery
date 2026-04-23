@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { EntrepotsModule } from './entrepots/entrepots.module';
 import { CoursesModule } from './courses/courses.module';
 import { IncidentsModule } from './incidents/incidents.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { IncidentsModule } from './incidents/incidents.module';
       synchronize: true,
     }),
     UsersModule,
+    AuthModule,
     EntrepotsModule,
     CoursesModule,
     IncidentsModule,
