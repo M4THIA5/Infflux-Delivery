@@ -29,6 +29,12 @@ export class Course {
   @Column({ type: 'varchar' })
   adresseLivraison: string;
 
+  @Column({ type: 'float', nullable: true })
+  latLivraison: number | null;
+
+  @Column({ type: 'float', nullable: true })
+  lngLivraison: number | null;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -43,6 +49,18 @@ export class Course {
 
   @Column({ type: 'uuid' })
   entrepotId: string;
+
+  @Column('enum', {
+    enum: ['PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'],
+    default: 'PENDING',
+  })
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+
+  @Column({ type: 'boolean', default: true })
+  isLegal: boolean;
+
+  @Column({ type: 'enum', enum: ['SMALL', 'MEDIUM', 'LARGE', 'REFRIGERATED'] })
+  remorque: 'SMALL' | 'MEDIUM' | 'LARGE' | 'REFRIGERATED';
 
   @ManyToOne(() => User, (user) => user.customerCourses)
   @JoinColumn({ name: 'customerId' })

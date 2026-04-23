@@ -1,0 +1,12 @@
+meta {
+  name: My Stats
+  type: http
+  seq: 3
+}
+
+// Retourne { total, completed, cancelled, inProgress, pending, totalRevenu, avgPrix }
+get {
+  url: {{baseUrl}}/courses/mine/stats
+  body: none
+  auth: inherit
+}
