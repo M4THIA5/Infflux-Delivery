@@ -11,6 +11,7 @@ const mockUser: User = {
   email: 'admin@test.com',
   password: 'hashed',
   isActive: true,
+  position: null,
   createdAt: new Date(),
   updatedAt: new Date(),
   customerCourses: [],
@@ -113,6 +114,24 @@ describe('UsersService', () => {
       await service.update('uuid-1', { password: 'newpass123' });
       const savedUser = mockRepository.save.mock.calls[0][0] as User;
       expect(savedUser.password).not.toBe('newpass123');
+    });
+  });
+
+  describe('updatePosition', () => {
+    it('should throw NotFoundException if user not found', async () => {
+      mockRepository.findOneBy.mockResolvedValue(null);
+      await expect(service.updatePosition('bad-id', 48.8566, 2.3522)).rejects.toThrow(NotFoundException);
+    });
+
+    it('should call raw query to update position', async () => {
+      mockRepository.findOneBy.mockResolvedValue(mockUser);
+      const queryMock = jest.fn().mockResolvedValue(undefined);
+      (service as any).usersRepository.query = queryMock;
+      await service.updatePosition('uuid-1', 48.8566, 2.3522);
+      expect(queryMock).toHaveBeenCalledWith(
+        expect.stringContaining('ST_SetSRID'),
+        [2.3522, 48.8566, 'uuid-1'],
+      );
     });
   });
 

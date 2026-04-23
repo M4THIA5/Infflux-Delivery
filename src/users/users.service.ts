@@ -57,4 +57,12 @@ export class UsersService {
     await this.findOne(id);
     await this.usersRepository.delete(id);
   }
+
+  async updatePosition(userId: string, latitude: number, longitude: number): Promise<void> {
+    await this.findOne(userId);
+    await this.usersRepository.query(
+      `UPDATE "user" SET position = ST_SetSRID(ST_MakePoint($1, $2), 4326) WHERE id = $3`,
+      [longitude, latitude, userId],
+    );
+  }
 }
