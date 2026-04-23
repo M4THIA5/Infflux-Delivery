@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import * as bcrypt from 'bcrypt';
 import { User, UserRole } from '../../src/users/user.entity';
 
 interface UserSeedData {
@@ -19,7 +20,11 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   const repo = dataSource.getRepository(User);
 
   for (const user of users) {
-    await repo.upsert(user, ['email']);
+    const existing = await repo.findOneBy({ email: user.email });
+    if (!existing) {
+      const hashed = await bcrypt.hash(user.password, 10);
+      await repo.save(repo.create({ ...user, password: hashed }));
+    }
   }
 
   console.log(`  ✅ ${users.length} utilisateurs seedés`);
