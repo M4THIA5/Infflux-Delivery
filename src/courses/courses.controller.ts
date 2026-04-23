@@ -15,8 +15,10 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { AcceptCourseDto } from './dto/accept-course.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from '../users/user.entity';
+import { User, UserRole } from '../users/user.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('courses')
@@ -26,11 +28,23 @@ export class CoursesController {
     private readonly courseGateway: CourseGateway,
   ) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Get()
+  findAll() {
+    return this.coursesService.findAll();
+  }
+
   @Post()
   async create(@Body() dto: CreateCourseDto) {
     const course = await this.coursesService.create(dto);
     this.courseGateway.proposeCourse(course);
     return course;
+  }
+
+  @Get('mine')
+  findMine(@CurrentUser() user: User) {
+    return this.coursesService.findMine(user.id);
   }
 
   @Get('nearby')
@@ -44,11 +58,6 @@ export class CoursesController {
       parseFloat(lng),
       radius ? parseFloat(radius) : undefined,
     );
-  }
-
-  @Get('mine')
-  findMine(@CurrentUser() user: User) {
-    return this.coursesService.findMine(user.id);
   }
 
   @Get(':id')
