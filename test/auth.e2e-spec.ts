@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+import {
+  INestApplication,
+  ValidationPipe,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -43,7 +47,10 @@ describe('Auth (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         PassportModule,
-        JwtModule.register({ secret: JWT_SECRET, signOptions: { expiresIn: '1h' } }),
+        JwtModule.register({
+          secret: JWT_SECRET,
+          signOptions: { expiresIn: '1h' },
+        }),
       ],
       controllers: [AuthController],
       providers: [
@@ -56,7 +63,9 @@ describe('Auth (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-    app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+    app.useGlobalInterceptors(
+      new ClassSerializerInterceptor(app.get(Reflector)),
+    );
     await app.init();
   });
 
@@ -90,7 +99,7 @@ describe('Auth (e2e)', () => {
         .expect(400);
     });
 
-    it('devrait retourner 401 si l\'utilisateur n\'existe pas', () => {
+    it("devrait retourner 401 si l'utilisateur n'existe pas", () => {
       mockUsersService.findByEmail.mockResolvedValue(null);
       return request(app.getHttpServer())
         .post('/auth/login')
@@ -107,14 +116,17 @@ describe('Auth (e2e)', () => {
     });
 
     it('devrait retourner 401 si le compte est inactif', () => {
-      mockUsersService.findByEmail.mockResolvedValue({ ...mockUser, isActive: false });
+      mockUsersService.findByEmail.mockResolvedValue({
+        ...mockUser,
+        isActive: false,
+      });
       return request(app.getHttpServer())
         .post('/auth/login')
         .send({ email: 'admin@test.com', password: 'password123' })
         .expect(401);
     });
 
-    it('devrait retourner 200 avec un access_token et l\'utilisateur (sans mot de passe)', async () => {
+    it("devrait retourner 200 avec un access_token et l'utilisateur (sans mot de passe)", async () => {
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
 
       const res = await request(app.getHttpServer())
@@ -135,9 +147,7 @@ describe('Auth (e2e)', () => {
 
   describe('GET /auth/me', () => {
     it('devrait retourner 401 sans token', () => {
-      return request(app.getHttpServer())
-        .get('/auth/me')
-        .expect(401);
+      return request(app.getHttpServer()).get('/auth/me').expect(401);
     });
 
     it('devrait retourner 401 avec un token invalide', () => {
@@ -147,7 +157,7 @@ describe('Auth (e2e)', () => {
         .expect(401);
     });
 
-    it('devrait retourner 200 avec l\'utilisateur courant (sans mot de passe)', async () => {
+    it("devrait retourner 200 avec l'utilisateur courant (sans mot de passe)", async () => {
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
 
       const loginRes = await request(app.getHttpServer())
@@ -168,7 +178,7 @@ describe('Auth (e2e)', () => {
       expect(res.body.password).toBeUndefined();
     });
 
-    it('devrait retourner 401 si l\'utilisateur est inactif', async () => {
+    it("devrait retourner 401 si l'utilisateur est inactif", async () => {
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
 
       const loginRes = await request(app.getHttpServer())
@@ -177,7 +187,10 @@ describe('Auth (e2e)', () => {
 
       token = loginRes.body.access_token as string;
 
-      mockUsersService.findOne.mockResolvedValue({ ...mockUser, isActive: false });
+      mockUsersService.findOne.mockResolvedValue({
+        ...mockUser,
+        isActive: false,
+      });
 
       return request(app.getHttpServer())
         .get('/auth/me')

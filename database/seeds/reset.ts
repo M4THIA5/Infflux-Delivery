@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
 import { User } from '../../src/users/user.entity';
@@ -17,16 +18,16 @@ async function main(): Promise<void> {
   await dataSource.initialize();
 
   // Ordre inverse des dépendances
-  await dataSource.getRepository(Incident).delete({});
+  await dataSource.query('DELETE FROM "incident"');
   console.log('  ✅ incidents supprimés');
 
-  await dataSource.getRepository(Course).delete({});
+  await dataSource.query('DELETE FROM "course"');
   console.log('  ✅ courses supprimées');
 
-  await dataSource.getRepository(Entrepot).delete({});
+  await dataSource.query('DELETE FROM "entrepot"');
   console.log('  ✅ entrepots supprimés');
 
-  await dataSource.getRepository(User).delete({});
+  await dataSource.query('DELETE FROM "user"');
   console.log('  ✅ utilisateurs supprimés');
 
   console.log('✅ Reset terminé');

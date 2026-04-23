@@ -24,17 +24,17 @@ export class User {
   @Column({ type: 'enum', enum: UserRole })
   role: UserRole;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', unique: true })
   email: string;
 
   @Exclude()
-  @Column()
+  @Column({ type: 'varchar' })
   password: string;
 
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
   @Column({
