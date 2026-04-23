@@ -1,5 +1,6 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule, InjectDataSource } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { DataSource } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,7 +12,6 @@ import { UsersModule } from './users/users.module';
 import { EntrepotsModule } from './entrepots/entrepots.module';
 import { CoursesModule } from './courses/courses.module';
 import { IncidentsModule } from './incidents/incidents.module';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,8 +21,8 @@ import { AuthModule } from './auth/auth.module';
       entities: [User, Entrepot, Course, Incident],
       synchronize: true,
     }),
+    ScheduleModule.forRoot(),
     UsersModule,
-    AuthModule,
     EntrepotsModule,
     CoursesModule,
     IncidentsModule,
