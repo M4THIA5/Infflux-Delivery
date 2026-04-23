@@ -1,0 +1,21 @@
+meta {
+  name: Update Entrepot
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/entrepots/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{entrepotId}}
+}
+
+body:json {
+  {
+    "addresse": "15 Avenue des Entrepôts, 69000 Lyon"
+  }
+}

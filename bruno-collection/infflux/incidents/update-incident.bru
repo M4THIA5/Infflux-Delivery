@@ -1,0 +1,21 @@
+meta {
+  name: Update Incident
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/incidents/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{incidentId}}
+}
+
+body:json {
+  {
+    "commentaire": "Situation résolue, reprise du trajet normal."
+  }
+}
