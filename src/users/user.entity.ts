@@ -37,6 +37,9 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ type: 'geography', spatialFeatureType: 'Point', srid: 4326, nullable: true })
+  position: string | null;
+
   @CreateDateColumn()
   createdAt: Date;
 
