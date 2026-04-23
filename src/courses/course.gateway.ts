@@ -29,8 +29,14 @@ export class CourseGateway {
   async handleAcceptCourse(
     @MessageBody() payload: AcceptCoursePayload,
   ): Promise<void> {
-    const course = await this.coursesService.accept(payload.courseId, payload.delivererId);
-    this.server.emit('course-accepted', { courseId: course.id, delivererId: course.delivererId });
+    const course = await this.coursesService.accept(
+      payload.courseId,
+      payload.delivererId,
+    );
+    this.server.emit('course-accepted', {
+      courseId: course.id,
+      delivererId: course.delivererId,
+    });
   }
 
   @Cron('*/30 * * * * *')
