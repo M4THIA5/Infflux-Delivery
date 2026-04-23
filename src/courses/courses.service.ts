@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { Course } from './course.entity';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -72,6 +72,6 @@ export class CoursesService {
   }
 
   findPending(): Promise<Course[]> {
-    return this.coursesRepository.find({ where: { delivererId: null } });
+    return this.coursesRepository.find({ where: { delivererId: IsNull() } });
   }
 }

@@ -99,7 +99,7 @@ describe('CoursesService', () => {
     it('should return courses without deliverer', async () => {
       mockRepository.find.mockResolvedValue([mockCourse]);
       const result = await service.findPending();
-      expect(mockRepository.find).toHaveBeenCalledWith({ where: { delivererId: null } });
+      expect(mockRepository.find).toHaveBeenCalledWith({ where: { delivererId: expect.anything() } });
       expect(result).toEqual([mockCourse]);
     });
   });

@@ -9,17 +9,23 @@ import {
   Query,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
+import { CourseGateway } from './course.gateway';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { AcceptCourseDto } from './dto/accept-course.dto';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly coursesService: CoursesService,
+    private readonly courseGateway: CourseGateway,
+  ) {}
 
   @Post()
-  create(@Body() dto: CreateCourseDto) {
-    return this.coursesService.create(dto);
+  async create(@Body() dto: CreateCourseDto) {
+    const course = await this.coursesService.create(dto);
+    this.courseGateway.proposeCourse(course);
+    return course;
   }
 
   @Get('nearby')
