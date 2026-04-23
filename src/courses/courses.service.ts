@@ -16,6 +16,10 @@ export class CoursesService {
     private readonly coursesRepository: Repository<Course>,
   ) {}
 
+  findAll(): Promise<Course[]> {
+    return this.coursesRepository.find({ relations: ['customer', 'deliverer', 'entrepot'] });
+  }
+
   create(dto: CreateCourseDto): Promise<Course> {
     const course = this.coursesRepository.create({
       ...dto,

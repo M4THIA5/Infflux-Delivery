@@ -33,6 +33,11 @@ export class CoursesController {
     return course;
   }
 
+  @Get()
+  findAll() {
+    return this.coursesService.findAll();
+  }
+
   @Get('mine')
   findMine(@CurrentUser() user: User) {
     return this.coursesService.findByCustomer(user.id);
