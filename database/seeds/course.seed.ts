@@ -30,21 +30,31 @@ export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
   for (const item of data) {
     const customer = await userRepo.findOneBy({ email: item.customerEmail });
     if (!customer) {
-      console.warn(`  ⚠️  customer introuvable : ${item.customerEmail}, course ignorée`);
+      console.warn(
+        `  ⚠️  customer introuvable : ${item.customerEmail}, course ignorée`,
+      );
       continue;
     }
 
-    const entrepot = await entrepotRepo.findOneBy({ addresse: item.entrepotAddresse });
+    const entrepot = await entrepotRepo.findOneBy({
+      addresse: item.entrepotAddresse,
+    });
     if (!entrepot) {
-      console.warn(`  ⚠️  entrepot introuvable : ${item.entrepotAddresse}, course ignorée`);
+      console.warn(
+        `  ⚠️  entrepot introuvable : ${item.entrepotAddresse}, course ignorée`,
+      );
       continue;
     }
 
     let delivererId: string | null = null;
     if (item.delivererEmail) {
-      const deliverer = await userRepo.findOneBy({ email: item.delivererEmail });
+      const deliverer = await userRepo.findOneBy({
+        email: item.delivererEmail,
+      });
       if (!deliverer) {
-        console.warn(`  ⚠️  livreur introuvable : ${item.delivererEmail}, course ignorée`);
+        console.warn(
+          `  ⚠️  livreur introuvable : ${item.delivererEmail}, course ignorée`,
+        );
         continue;
       }
       delivererId = deliverer.id;
@@ -66,7 +76,9 @@ export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
         delivererId,
         entrepotId: entrepot.id,
         dateHeureDebut: new Date(item.dateHeureDebut),
-        dateHeureArrivee: item.dateHeureArrivee ? new Date(item.dateHeureArrivee) : null,
+        dateHeureArrivee: item.dateHeureArrivee
+          ? new Date(item.dateHeureArrivee)
+          : null,
         prix: item.prix,
         adresseLivraison: item.adresseLivraison,
       }),
@@ -76,6 +88,8 @@ export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
     inserted++;
   }
 
-  console.log(`  ✅ courses : ${inserted} insérées, ${data.length - inserted} ignorées (déjà existantes)`);
+  console.log(
+    `  ✅ courses : ${inserted} insérées, ${data.length - inserted} ignorées (déjà existantes)`,
+  );
   return result;
 }

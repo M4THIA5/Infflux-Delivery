@@ -1,0 +1,15 @@
+meta {
+  name: Delete Entrepot
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/entrepots/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{entrepotId}}
+}

@@ -1,0 +1,20 @@
+meta {
+  name: Create Incident
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/incidents
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "type": "ROUTIER",
+    "commentaire": "Accident sur l'autoroute A6, déviation en cours.",
+    "courseId": "{{courseId}}",
+    "userId": "{{userId}}"
+  }
+}

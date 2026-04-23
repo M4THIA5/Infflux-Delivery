@@ -1,0 +1,15 @@
+meta {
+  name: Get Incidents by Course
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/incidents/course/:courseId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  courseId: {{courseId}}
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Create User
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/users
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "role": "DELIVER",
+    "name": "Jean Dupont",
+    "email": "jean.dupont@infflux.com",
+    "password": "password123",
+    "isActive": true
+  }
+}

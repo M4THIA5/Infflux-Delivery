@@ -1,0 +1,17 @@
+meta {
+  name: Create Entrepot
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/entrepots
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "addresse": "12 Rue de la Logistique, 69000 Lyon"
+  }
+}

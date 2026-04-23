@@ -17,9 +17,24 @@ import { IncidentsModule } from './incidents/incidents.module';
 import { AuthModule } from './auth/auth.module';
 
 const DEFAULT_USERS = [
-  { role: UserRole.ADMIN, name: 'Admin', email: 'admin@infflux.dev', password: 'admin123' },
-  { role: UserRole.DELIVER, name: 'Livreur', email: 'livreur@infflux.dev', password: 'livreur123' },
-  { role: UserRole.CUSTOMER, name: 'Client', email: 'client@infflux.dev', password: 'client123' },
+  {
+    role: UserRole.ADMIN,
+    name: 'Admin',
+    email: 'admin@infflux.dev',
+    password: 'admin123',
+  },
+  {
+    role: UserRole.DELIVER,
+    name: 'Livreur',
+    email: 'livreur@infflux.dev',
+    password: 'livreur123',
+  },
+  {
+    role: UserRole.CUSTOMER,
+    name: 'Client',
+    email: 'client@infflux.dev',
+    password: 'client123',
+  },
 ];
 
 @Module({
@@ -58,7 +73,7 @@ export class AppModule implements OnModuleInit {
         const hashed = await bcrypt.hash(u.password, 10);
         await this.dataSource.query(
           `INSERT INTO "user" (id, role, name, email, password, "isActive", "createdAt", "updatedAt")
-           VALUES (gen_random_uuid(), $1, $2, $3, $4, true, now(), now())`,
+          VALUES (gen_random_uuid(), $1, $2, $3, $4, true, now(), now())`,
           [u.role, u.name, u.email, hashed],
         );
       }

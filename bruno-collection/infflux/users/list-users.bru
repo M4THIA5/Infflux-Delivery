@@ -1,0 +1,19 @@
+meta {
+  name: List Users
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/users
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~role: DELIVER
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
