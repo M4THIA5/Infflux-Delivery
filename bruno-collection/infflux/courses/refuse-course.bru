@@ -1,0 +1,19 @@
+meta {
+  name: Refuse Course
+  type: http
+  seq: 8
+}
+
+// Refuse une course qui vous est assignée (remet au statut PENDING, delivererId = null)
+// Erreurs possibles :
+//   403 - la course n'est pas assignée à vous
+//   400 - statut IN_PROGRESS, COMPLETED ou CANCELLED
+post {
+  url: {{baseUrl}}/courses/:id/refuse
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{courseId}}
+}

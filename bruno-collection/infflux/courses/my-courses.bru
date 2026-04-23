@@ -1,9 +1,12 @@
 meta {
   name: My Courses
   type: http
-  seq: 6
+  seq: 2
 }
 
+// Retourne { active: Course | null, history: Course[] }
+// active = course IN_PROGRESS assignée au livreur connecté
+// history = courses COMPLETED ou CANCELLED
 get {
   url: {{baseUrl}}/courses/mine
   body: none

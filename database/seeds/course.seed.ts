@@ -13,6 +13,11 @@ interface CourseSeedData {
   dateHeureArrivee: string | null;
   prix: number;
   adresseLivraison: string;
+  latLivraison?: number;
+  lngLivraison?: number;
+  remorque: 'SMALL' | 'MEDIUM' | 'LARGE' | 'REFRIGERATED';
+  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+  isLegal?: boolean;
 }
 
 export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
@@ -81,6 +86,11 @@ export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
           : null,
         prix: item.prix,
         adresseLivraison: item.adresseLivraison,
+        latLivraison: item.latLivraison ?? null,
+        lngLivraison: item.lngLivraison ?? null,
+        remorque: item.remorque,
+        status: item.status ?? 'PENDING',
+        isLegal: item.isLegal ?? true,
       }),
     );
 

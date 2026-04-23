@@ -2,6 +2,8 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
@@ -17,7 +19,9 @@ export class CoursesService {
   ) {}
 
   findAll(): Promise<Course[]> {
-    return this.coursesRepository.find({ relations: ['customer', 'deliverer', 'entrepot'] });
+    return this.coursesRepository.find({
+      relations: ['customer', 'deliverer', 'entrepot'],
+    });
   }
 
   create(dto: CreateCourseDto): Promise<Course> {
@@ -82,11 +86,80 @@ export class CoursesService {
     return this.coursesRepository.find({ where: { delivererId: IsNull() } });
   }
 
-  findByCustomer(customerId: string): Promise<Course[]> {
-    return this.coursesRepository.find({
-      where: { customerId },
-      relations: ['deliverer', 'entrepot'],
+  async findMine(userId: string): Promise<{
+    active: Course | null;
+    history: Course[];
+  }> {
+    const courses = await this.coursesRepository.find({
+      where: [{ customerId: userId }, { delivererId: userId }],
+      relations: ['customer', 'deliverer', 'entrepot'],
       order: { createdAt: 'DESC' },
     });
+
+    const active =
+      courses.find(
+        (c) => c.delivererId === userId && c.status === 'IN_PROGRESS',
+      ) ?? null;
+
+    const history = courses.filter(
+      (c) =>
+        c.delivererId === userId &&
+        (c.status === 'COMPLETED' || c.status === 'CANCELLED'),
+    );
+
+    return { active, history };
+  }
+
+  async refuse(id: string, delivererId: string): Promise<Course> {
+    const course = await this.findOne(id);
+    if (course.delivererId !== delivererId) {
+      throw new ForbiddenException(
+        'Vous ne pouvez pas refuser une course qui ne vous est pas assignée',
+      );
+    }
+    if (course.status === 'IN_PROGRESS') {
+      throw new BadRequestException(
+        'Impossible de refuser une course déjà en cours',
+      );
+    }
+    if (course.status === 'COMPLETED' || course.status === 'CANCELLED') {
+      throw new BadRequestException(
+        `Impossible de refuser une course au statut ${course.status}`,
+      );
+    }
+    course.delivererId = null;
+    course.status = 'PENDING';
+    return this.coursesRepository.save(course);
+  }
+
+  async getMyStats(userId: string): Promise<{
+    total: number;
+    completed: number;
+    cancelled: number;
+    inProgress: number;
+    pending: number;
+    totalRevenu: number;
+    avgPrix: number;
+  }> {
+    const courses = await this.coursesRepository.find({
+      where: { delivererId: userId },
+      select: ['id', 'status', 'prix'],
+    });
+
+    const completed = courses.filter((c) => c.status === 'COMPLETED');
+    const totalRevenu = completed.reduce((sum, c) => sum + Number(c.prix), 0);
+
+    return {
+      total: courses.length,
+      completed: completed.length,
+      cancelled: courses.filter((c) => c.status === 'CANCELLED').length,
+      inProgress: courses.filter((c) => c.status === 'IN_PROGRESS').length,
+      pending: courses.filter((c) => c.status === 'PENDING').length,
+      totalRevenu: Math.round(totalRevenu * 100) / 100,
+      avgPrix:
+        completed.length > 0
+          ? Math.round((totalRevenu / completed.length) * 100) / 100
+          : 0,
+    };
   }
 }
