@@ -18,7 +18,7 @@ export class UsersService {
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
-    const existing = await this.usersRepository.findOne({ where: { email: dto.email } });
+    const existing = await this.usersRepository.findOneBy({ email: dto.email });
     if (existing) throw new ConflictException('Email déjà utilisé');
 
     const hashed = await bcrypt.hash(dto.password, 10);
@@ -46,10 +46,10 @@ export class UsersService {
 
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.findOne(id);
-    if (dto.password) {
-      dto.password = await bcrypt.hash(dto.password, 10);
-    }
-    Object.assign(user, dto);
+    const password = dto.password
+      ? await bcrypt.hash(dto.password, 10)
+      : user.password;
+    Object.assign(user, dto, { password });
     return this.usersRepository.save(user);
   }
 
