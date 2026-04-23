@@ -22,7 +22,11 @@ export class UsersService {
     if (existing) throw new ConflictException('Email déjà utilisé');
 
     const hashed = await bcrypt.hash(dto.password, 10);
-    const user = this.usersRepository.create({ role: UserRole.DELIVER, ...dto, password: hashed });
+    const user = this.usersRepository.create({
+      role: UserRole.DELIVER,
+      ...dto,
+      password: hashed,
+    });
     return this.usersRepository.save(user);
   }
 

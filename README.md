@@ -53,14 +53,6 @@ pnpm db:reset   # vide toutes les tables
 pnpm db:fresh   # reset + seed en une commande
 ```
 
-## Tests
-
-```bash
-pnpm test           # tests unitaires
-pnpm test:e2e       # tests end-to-end
-pnpm test:cov       # couverture de code
-```
-
 ## Authentification
 
 Toutes les routes (sauf `POST /auth/login`) nécessitent un token JWT.

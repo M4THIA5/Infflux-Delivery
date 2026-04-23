@@ -52,7 +52,10 @@ export class CoursesService {
   async update(id: string, dto: UpdateCourseDto): Promise<Course> {
     const course = await this.findOne(id);
     if (dto.dateHeureDebut) {
-      Object.assign(course, { ...dto, dateHeureDebut: new Date(dto.dateHeureDebut) });
+      Object.assign(course, {
+        ...dto,
+        dateHeureDebut: new Date(dto.dateHeureDebut),
+      });
     } else {
       Object.assign(course, dto);
     }
