@@ -13,7 +13,7 @@ export class Entrepot {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   addresse: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 7, nullable: true })

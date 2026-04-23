@@ -24,20 +24,25 @@ export class User {
   @Column({ type: 'enum', enum: UserRole })
   role: UserRole;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', unique: true })
   email: string;
 
   @Exclude()
-  @Column()
+  @Column({ type: 'varchar' })
   password: string;
 
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
-  @Column({ type: 'geography', spatialFeatureType: 'Point', srid: 4326, nullable: true })
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+    nullable: true,
+  })
   position: string | null;
 
   @CreateDateColumn()

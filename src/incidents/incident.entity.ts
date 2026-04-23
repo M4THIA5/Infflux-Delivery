@@ -25,16 +25,16 @@ export class Incident {
   @Column({ type: 'enum', enum: IncidentType })
   type: IncidentType;
 
-  @Column()
+  @Column({ type: 'varchar' })
   commentaire: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
+  @Column({ type: 'uuid' })
   courseId: string;
 
-  @Column()
+  @Column({ type: 'uuid' })
   userId: string;
 
   @ManyToOne(() => Course, (course) => course.incidents)

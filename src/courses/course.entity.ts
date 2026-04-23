@@ -17,7 +17,7 @@ export class Course {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'timestamp' })
   dateHeureDebut: Date;
 
   @Column({ nullable: true, type: 'timestamp' })
@@ -26,7 +26,7 @@ export class Course {
   @Column('decimal', { precision: 10, scale: 2 })
   prix: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   adresseLivraison: string;
 
   @CreateDateColumn()
@@ -35,13 +35,13 @@ export class Course {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
+  @Column({ type: 'uuid' })
   customerId: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
   delivererId: string | null;
 
-  @Column()
+  @Column({ type: 'uuid' })
   entrepotId: string;
 
   @ManyToOne(() => User, (user) => user.customerCourses)
