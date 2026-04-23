@@ -90,21 +90,19 @@ export class CoursesService {
     active: Course | null;
     history: Course[];
   }> {
-    const courses = await this.coursesRepository.find({
-      where: [{ customerId: userId }, { delivererId: userId }],
-      relations: ['customer', 'deliverer', 'entrepot'],
-      order: { createdAt: 'DESC' },
-    });
+    const courses = await this.coursesRepository
+      .createQueryBuilder('course')
+      .leftJoinAndSelect('course.customer', 'customer')
+      .leftJoinAndSelect('course.deliverer', 'deliverer')
+      .leftJoinAndSelect('course.entrepot', 'entrepot')
+      .where('course."delivererId" = :userId', { userId })
+      .orderBy('course."createdAt"', 'DESC')
+      .getMany();
 
-    const active =
-      courses.find(
-        (c) => c.delivererId === userId && c.status === 'IN_PROGRESS',
-      ) ?? null;
+    const active = courses.find((c) => c.status === 'IN_PROGRESS') ?? null;
 
     const history = courses.filter(
-      (c) =>
-        c.delivererId === userId &&
-        (c.status === 'COMPLETED' || c.status === 'CANCELLED'),
+      (c) => c.status === 'COMPLETED' || c.status === 'CANCELLED',
     );
 
     return { active, history };
