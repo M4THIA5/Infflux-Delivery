@@ -1,8 +1,4 @@
-@baseUrl = http://localhost:3000
-@token =
-
 ### Login admin
-# @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -10,6 +6,11 @@ Content-Type: application/json
   "email": "admin@infflux.dev",
   "password": "admin123"
 }
+
+> {%
+  client.global.set("token", response.body.access_token);
+  client.global.set("userId", response.body.user.id);
+%}
 
 ### Créer un compte
 POST {{baseUrl}}/users
@@ -22,7 +23,9 @@ Content-Type: application/json
   "role": "CUSTOMER"
 }
 
-###
+> {%
+  client.global.set("customerId", response.body.id);
+%}
 
 ### Créer un entrepôt
 POST {{baseUrl}}/entrepots
@@ -35,11 +38,13 @@ Authorization: Bearer {{token}}
   "longitude": 4.8357
 }
 
+> {%
+  client.global.set("entrepotId", response.body.id);
+%}
+
 ### Lister les entrepôts
 GET {{baseUrl}}/entrepots
 Authorization: Bearer {{token}}
-
-###
 
 ### Créer une course
 POST {{baseUrl}}/courses
@@ -50,11 +55,15 @@ Authorization: Bearer {{token}}
   "dateHeureDebut": "2026-04-25T08:00:00.000Z",
   "prix": 120.50,
   "adresseLivraison": "25 Rue du Commerce, 69002 Lyon",
-  "customerId": "789fa53b-50cf-4268-a3e0-8168b6a4b5ba",
-  "entrepotId": "REMPLACE_PAR_ENTREPOT_ID",
+  "customerId": "{{userId}}",
+  "entrepotId": "{{entrepotId}}",
   "remorque": "MEDIUM",
   "isLegal": true
 }
+
+> {%
+  client.global.set("courseId", response.body.id);
+%}
 
 ### Lister toutes les courses (admin)
 GET {{baseUrl}}/courses
@@ -69,19 +78,17 @@ GET {{baseUrl}}/courses/nearby?lat=45.7640&lng=4.8357&radius=10000
 Authorization: Bearer {{token}}
 
 ### Accepter une course
-POST {{baseUrl}}/courses/REMPLACE_PAR_COURSE_ID/accept
+POST {{baseUrl}}/courses/{{courseId}}/accept
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "delivererId": "REMPLACE_PAR_DELIVERER_ID"
+  "delivererId": "{{userId}}"
 }
 
 ### Supprimer une course
-DELETE {{baseUrl}}/courses/REMPLACE_PAR_COURSE_ID
+DELETE {{baseUrl}}/courses/{{courseId}}
 Authorization: Bearer {{token}}
-
-###
 
 ### Lister les users
 GET {{baseUrl}}/users
