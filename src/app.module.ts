@@ -14,6 +14,7 @@ import { UsersModule } from './users/users.module';
 import { EntrepotsModule } from './entrepots/entrepots.module';
 import { CoursesModule } from './courses/courses.module';
 import { IncidentsModule } from './incidents/incidents.module';
+import { AuthModule } from './auth/auth.module';
 
 const DEFAULT_USERS = [
   { role: UserRole.ADMIN, name: 'Admin', email: 'admin@infflux.dev', password: 'admin123' },
@@ -30,6 +31,7 @@ const DEFAULT_USERS = [
       synchronize: true,
     }),
     ScheduleModule.forRoot(),
+    AuthModule,
     UsersModule,
     EntrepotsModule,
     CoursesModule,

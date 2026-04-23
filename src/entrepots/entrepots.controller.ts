@@ -6,11 +6,14 @@ import {
   Delete,
   Body,
   Param,
+  UseGuards,
 } from '@nestjs/common';
 import { EntrepotsService } from './entrepots.service';
 import { CreateEntrepotDto } from './dto/create-entrepot.dto';
 import { UpdateEntrepotDto } from './dto/update-entrepot.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('entrepots')
 export class EntrepotsController {
   constructor(private readonly entrepotsService: EntrepotsService) {}
