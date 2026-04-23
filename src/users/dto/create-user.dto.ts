@@ -2,8 +2,9 @@ import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsBoolean, MinLength } from 'c
 import { UserRole } from '../user.entity';
 
 export class CreateUserDto {
+  @IsOptional()
   @IsEnum(UserRole)
-  role: UserRole;
+  role?: UserRole;
 
   @IsNotEmpty()
   name: string;
