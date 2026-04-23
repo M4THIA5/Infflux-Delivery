@@ -1,0 +1,17 @@
+meta {
+  name: List Courses Nearby
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/courses/nearby
+  body: none
+  auth: inherit
+}
+
+params:query {
+  lat: 48.8566
+  lng: 2.3522
+  radius: 10000
+}

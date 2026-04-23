@@ -1,0 +1,21 @@
+meta {
+  name: Accept Course
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/courses/:id/accept
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{courseId}}
+}
+
+body:json {
+  {
+    "delivererId": "{{delivererId}}"
+  }
+}

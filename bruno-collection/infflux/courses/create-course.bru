@@ -1,0 +1,21 @@
+meta {
+  name: Create Course
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/courses
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "dateHeureDebut": "2026-04-24T08:00:00.000Z",
+    "prix": 25.50,
+    "adresseLivraison": "10 Rue du Client, 75001 Paris",
+    "customerId": "{{customerId}}",
+    "entrepotId": "{{entrepotId}}"
+  }
+}
