@@ -93,6 +93,29 @@ describe('UsersService', () => {
     });
   });
 
+  describe('update', () => {
+    it('should throw NotFoundException if user not found', async () => {
+      mockRepository.findOneBy.mockResolvedValue(null);
+      await expect(service.update('bad-id', { name: 'New Name' })).rejects.toThrow(NotFoundException);
+    });
+
+    it('should update and return user without re-hashing if no password', async () => {
+      mockRepository.findOneBy.mockResolvedValue({ ...mockUser });
+      mockRepository.save.mockResolvedValue({ ...mockUser, name: 'New Name' });
+      const result = await service.update('uuid-1', { name: 'New Name' });
+      expect(result.name).toBe('New Name');
+      expect(mockRepository.save).toHaveBeenCalled();
+    });
+
+    it('should re-hash password if provided in update', async () => {
+      mockRepository.findOneBy.mockResolvedValue({ ...mockUser });
+      mockRepository.save.mockResolvedValue(mockUser);
+      await service.update('uuid-1', { password: 'newpass123' });
+      const savedUser = mockRepository.save.mock.calls[0][0] as User;
+      expect(savedUser.password).not.toBe('newpass123');
+    });
+  });
+
   describe('remove', () => {
     it('should throw NotFoundException if user not found', async () => {
       mockRepository.findOneBy.mockResolvedValue(null);
