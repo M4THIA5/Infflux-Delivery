@@ -22,6 +22,10 @@ export class CreateCourseDto {
   @IsDateString()
   dateHeureDebut: string;
 
+  @IsOptional()
+  @IsDateString()
+  dateHeureArrivee?: string;
+
   @IsNumber()
   prix: number;
 

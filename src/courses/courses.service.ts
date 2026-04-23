@@ -28,6 +28,9 @@ export class CoursesService {
     const course = this.coursesRepository.create({
       ...dto,
       dateHeureDebut: new Date(dto.dateHeureDebut),
+      dateHeureArrivee: dto.dateHeureArrivee
+        ? new Date(dto.dateHeureArrivee)
+        : null,
     });
     return this.coursesRepository.save(course);
   }
@@ -59,14 +62,23 @@ export class CoursesService {
 
   async update(id: string, dto: UpdateCourseDto): Promise<Course> {
     const course = await this.findOne(id);
+    const nextValues = { ...dto };
+
     if (dto.dateHeureDebut) {
-      Object.assign(course, {
-        ...dto,
+      Object.assign(nextValues, {
         dateHeureDebut: new Date(dto.dateHeureDebut),
       });
-    } else {
-      Object.assign(course, dto);
     }
+
+    if ('dateHeureArrivee' in dto) {
+      Object.assign(nextValues, {
+        dateHeureArrivee: dto.dateHeureArrivee
+          ? new Date(dto.dateHeureArrivee)
+          : null,
+      });
+    }
+
+    Object.assign(course, nextValues);
     return this.coursesRepository.save(course);
   }
 
