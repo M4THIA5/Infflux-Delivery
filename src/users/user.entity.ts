@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+import type { Course } from '../courses/course.entity';
+import type { Incident } from '../incidents/incident.entity';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -40,11 +42,11 @@ export class User {
   updatedAt: Date;
 
   @OneToMany('Course', 'customer')
-  customerCourses: unknown[];
+  customerCourses: Course[];
 
   @OneToMany('Course', 'deliverer')
-  deliveredCourses: unknown[];
+  deliveredCourses: Course[];
 
   @OneToMany('Incident', 'user')
-  incidents: unknown[];
+  incidents: Incident[];
 }

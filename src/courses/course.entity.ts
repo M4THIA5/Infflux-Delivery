@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Entrepot } from '../entrepots/entrepot.entity';
+import type { Incident } from '../incidents/incident.entity';
 
 @Entity()
 export class Course {
@@ -56,5 +57,5 @@ export class Course {
   entrepot: Entrepot;
 
   @OneToMany('Incident', 'course')
-  incidents: unknown[];
+  incidents: Incident[];
 }

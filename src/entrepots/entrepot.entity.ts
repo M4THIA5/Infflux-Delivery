@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+import type { Course } from '../courses/course.entity';
 
 @Entity()
 export class Entrepot {
@@ -22,5 +23,5 @@ export class Entrepot {
   updatedAt: Date;
 
   @OneToMany('Course', 'entrepot')
-  courses: unknown[];
+  courses: Course[];
 }
