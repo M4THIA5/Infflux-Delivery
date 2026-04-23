@@ -46,6 +46,11 @@ export class CoursesController {
     );
   }
 
+  @Get('mine')
+  findMine(@CurrentUser() user: User) {
+    return this.coursesService.findMine(user.id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.coursesService.findOne(id);
