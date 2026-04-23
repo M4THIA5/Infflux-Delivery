@@ -24,15 +24,29 @@ export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
   const userRepo = dataSource.getRepository(User);
   const entrepotRepo = dataSource.getRepository(Entrepot);
 
-  const seeded: Course[] = [];
+  const result: Course[] = [];
+  let inserted = 0;
 
   for (const item of data) {
-    const customer = await userRepo.findOneByOrFail({ email: item.customerEmail });
-    const entrepot = await entrepotRepo.findOneByOrFail({ addresse: item.entrepotAddresse });
+    const customer = await userRepo.findOneBy({ email: item.customerEmail });
+    if (!customer) {
+      console.warn(`  ⚠️  customer introuvable : ${item.customerEmail}, course ignorée`);
+      continue;
+    }
+
+    const entrepot = await entrepotRepo.findOneBy({ addresse: item.entrepotAddresse });
+    if (!entrepot) {
+      console.warn(`  ⚠️  entrepot introuvable : ${item.entrepotAddresse}, course ignorée`);
+      continue;
+    }
 
     let delivererId: string | null = null;
     if (item.delivererEmail) {
-      const deliverer = await userRepo.findOneByOrFail({ email: item.delivererEmail });
+      const deliverer = await userRepo.findOneBy({ email: item.delivererEmail });
+      if (!deliverer) {
+        console.warn(`  ⚠️  livreur introuvable : ${item.delivererEmail}, course ignorée`);
+        continue;
+      }
       delivererId = deliverer.id;
     }
 
@@ -41,8 +55,13 @@ export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
       adresseLivraison: item.adresseLivraison,
     });
 
-    if (!existing) {
-      const course = courseRepo.create({
+    if (existing) {
+      result.push(existing);
+      continue;
+    }
+
+    const course = await courseRepo.save(
+      courseRepo.create({
         customerId: customer.id,
         delivererId,
         entrepotId: entrepot.id,
@@ -50,13 +69,13 @@ export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
         dateHeureArrivee: item.dateHeureArrivee ? new Date(item.dateHeureArrivee) : null,
         prix: item.prix,
         adresseLivraison: item.adresseLivraison,
-      });
-      seeded.push(await courseRepo.save(course));
-    } else {
-      seeded.push(existing);
-    }
+      }),
+    );
+
+    result.push(course);
+    inserted++;
   }
 
-  console.log(`  ✅ ${data.length} courses seedées`);
-  return seeded;
+  console.log(`  ✅ courses : ${inserted} insérées, ${data.length - inserted} ignorées (déjà existantes)`);
+  return result;
 }

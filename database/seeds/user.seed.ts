@@ -18,14 +18,18 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   ) as UserSeedData[];
 
   const repo = dataSource.getRepository(User);
+  let inserted = 0;
 
   for (const user of users) {
     const existing = await repo.findOneBy({ email: user.email });
-    if (!existing) {
-      const hashed = await bcrypt.hash(user.password, 10);
-      await repo.save(repo.create({ ...user, password: hashed }));
-    }
+    if (existing) continue;
+
+    const hashed = await bcrypt.hash(user.password, 10);
+    await repo.save(repo.create({ ...user, password: hashed }));
+    inserted++;
   }
 
-  console.log(`  ✅ ${users.length} utilisateurs seedés`);
+  console.log(
+    `  ✅ users : ${inserted} insérés, ${users.length - inserted} ignorés (déjà existants)`,
+  );
 }
