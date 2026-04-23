@@ -1,0 +1,37 @@
+[
+	{
+		"role": "ADMIN",
+		"name": "Admin Infflux",
+		"email": "admin@infflux.dev",
+		"password": "admin123",
+		"isActive": true
+	},
+	{
+		"role": "DELIVER",
+		"name": "Lina Martin",
+		"email": "lina.martin@infflux.dev",
+		"password": "deliver123",
+		"isActive": true
+	},
+	{
+		"role": "DELIVER",
+		"name": "Samir Diallo",
+		"email": "samir.diallo@infflux.dev",
+		"password": "deliver123",
+		"isActive": true
+	},
+	{
+		"role": "CUSTOMER",
+		"name": "Claire Dubois",
+		"email": "claire.dubois@infflux.dev",
+		"password": "customer123",
+		"isActive": true
+	},
+	{
+		"role": "CUSTOMER",
+		"name": "Yassine Benali",
+		"email": "yassine.benali@infflux.dev",
+		"password": "customer123",
+		"isActive": false
+	}
+]
