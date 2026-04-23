@@ -4,10 +4,6 @@ import { User } from '../../src/users/user.entity';
 import { Entrepot } from '../../src/entrepots/entrepot.entity';
 import { Course } from '../../src/courses/course.entity';
 import { Incident } from '../../src/incidents/incident.entity';
-import { seedUsers } from './user.seed';
-import { seedEntrepots } from './entrepot.seed';
-import { seedCourses } from './course.seed';
-import { seedIncidents } from './incident.seed';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -17,15 +13,23 @@ const dataSource = new DataSource({
 });
 
 async function main(): Promise<void> {
-  console.log('🌱 Seeding...');
+  console.log('🗑️  Reset de la base de données...');
   await dataSource.initialize();
 
-  await seedUsers(dataSource);
-  await seedEntrepots(dataSource);
-  const courses = await seedCourses(dataSource);
-  await seedIncidents(dataSource, courses);
+  // Ordre inverse des dépendances
+  await dataSource.getRepository(Incident).delete({});
+  console.log('  ✅ incidents supprimés');
 
-  console.log('✅ Seed terminé');
+  await dataSource.getRepository(Course).delete({});
+  console.log('  ✅ courses supprimées');
+
+  await dataSource.getRepository(Entrepot).delete({});
+  console.log('  ✅ entrepots supprimés');
+
+  await dataSource.getRepository(User).delete({});
+  console.log('  ✅ utilisateurs supprimés');
+
+  console.log('✅ Reset terminé');
 }
 
 main()

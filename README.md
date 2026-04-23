@@ -1,129 +1,146 @@
 # Infflux Delivery API
 
-## Description
+API REST NestJS pour la gestion de livraisons, livreurs, entrepots et incidents.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Stack
 
-## Project setup
+- **Framework** : NestJS 11
+- **Base de données** : PostgreSQL 16 (TypeORM, synchronize)
+- **Auth** : JWT (Passport)
+- **Validation** : class-validator
+
+## Installation
 
 ```bash
 pnpm install
 ```
 
-## Prisma (migrations, client, seed)
+## Variables d'environnement
 
-Avant d'executer les commandes Prisma, verifie que `DATABASE_URL` est defini (ex: fichier `.env`).
+Crée un fichier `.env` à la racine :
 
-### 1) Generer le client Prisma
-
-Utilite: regenere le client TypeScript dans `src/generated/prisma` apres un changement de schema.
-
-```bash
-pnpm exec prisma generate
+```env
+PORT=3000
+DATABASE_URL="postgresql://admin:password@localhost:5432/mydb?schema=public"
+JWT_SECRET="change_this_secret_in_production"
 ```
 
-### 2) Creer et appliquer une migration en developpement
+## Base de données
 
-Utilite: cree une nouvelle migration SQL a partir du schema Prisma, puis l'applique a la base locale.
-
-```bash
-pnpm exec prisma migrate dev --name nom_de_la_migration
-```
-
-Exemple:
+Lancer PostgreSQL avec Docker :
 
 ```bash
-pnpm exec prisma migrate dev --name add_delivery_fields
+docker-compose up -d
 ```
 
-### 3) Appliquer les migrations en environnement de deploiement
-
-Utilite: applique uniquement les migrations deja commitees (commande recommandee en CI/prod).
+## Démarrage
 
 ```bash
-pnpm exec prisma migrate deploy
+# développement
+pnpm start:dev
+
+# production
+pnpm start:prod
 ```
 
-### 4) Verifier l'etat des migrations
+Le serveur démarre sur `http://localhost:3000`.
 
-Utilite: compare l'etat local et l'etat en base pour detecter les migrations manquantes ou le drift.
+## Base de données — scripts
 
 ```bash
-pnpm exec prisma migrate status
+pnpm db:seed    # insère les données initiales (idempotent)
+pnpm db:reset   # vide toutes les tables
+pnpm db:fresh   # reset + seed en une commande
 ```
 
-### 5) Reinitialiser la base en developpement
-
-Utilite: supprime/recree la base, reapplique toutes les migrations, puis lance le seed si configure.
+## Tests
 
 ```bash
-pnpm exec prisma migrate reset
+pnpm test           # tests unitaires
+pnpm test:e2e       # tests end-to-end
+pnpm test:cov       # couverture de code
 ```
 
-### 6) Lancer les seeds
+## Authentification
 
-Utilite: injecte des donnees initiales (admin, catalogues, jeux de test, etc.).
+Toutes les routes (sauf `POST /auth/login`) nécessitent un token JWT.
 
-```bash
-pnpm exec prisma db seed
+### Login
+
+```http
+POST /auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@infflux.dev",
+  "password": "admin123"
+}
 ```
 
-### 7) Ouvrir Prisma Studio
+Réponse :
 
-Utilite: interface web locale pour consulter/modifier les donnees de la base.
-
-```bash
-pnpm exec prisma studio
+```json
+{
+  "access_token": "<jwt>",
+  "user": { ... }
+}
 ```
 
-### 8) Actions Prisma utiles selon le contexte
+### Utilisation du token
 
-- Synchroniser rapidement le schema vers la base sans creer de migration (prototype/dev rapide):
-
-```bash
-pnpm exec prisma db push
+```http
+Authorization: Bearer <access_token>
 ```
 
-- Importer la structure d'une base existante vers `prisma/schema.prisma` (introspection):
+### Utilisateur connecté
 
-```bash
-pnpm exec prisma db pull
+```http
+GET /auth/me
 ```
 
-- Formatter le schema Prisma:
+## Routes
 
-```bash
-pnpm exec prisma format
-```
+### Users `/users`
 
-- Ouvrir les docs CLI Prisma:
+> Toutes les routes sont protégées par JWT. Création, modification et suppression réservées aux `ADMIN`.
 
-```bash
-pnpm exec prisma --help
-```
+| Méthode | Route | Description |
+| ------- | ----- | ----------- |
+| `POST` | `/users` | Créer un utilisateur |
+| `GET` | `/users` | Lister les utilisateurs (`?role=ADMIN`, `DELIVER` ou `CUSTOMER`) |
+| `GET` | `/users/:id` | Récupérer un utilisateur |
+| `PATCH` | `/users/:id` | Modifier un utilisateur |
+| `DELETE` | `/users/:id` | Supprimer un utilisateur |
 
-## Compile and run the project
+### Entrepots `/entrepots`
 
-```bash
-# development
-$ pnpm run start
+| Méthode | Route | Description |
+| ------- | ----- | ----------- |
+| `POST` | `/entrepots` | Créer un entrepot |
+| `GET` | `/entrepots` | Lister les entrepots |
+| `GET` | `/entrepots/:id` | Récupérer un entrepot |
+| `PATCH` | `/entrepots/:id` | Modifier un entrepot |
+| `DELETE` | `/entrepots/:id` | Supprimer un entrepot |
 
-# watch mode
-$ pnpm run start:dev
+### Incidents `/incidents`
 
-# production mode
-$ pnpm run start:prod
-```
+| Méthode | Route | Description |
+| ------- | ----- | ----------- |
+| `POST` | `/incidents` | Créer un incident |
+| `GET` | `/incidents` | Lister les incidents |
+| `GET` | `/incidents/:id` | Récupérer un incident |
+| `GET` | `/incidents/course/:courseId` | Incidents d'une course |
+| `PATCH` | `/incidents/:id` | Modifier un incident |
+| `DELETE` | `/incidents/:id` | Supprimer un incident |
 
-## Run tests
+Types d'incident : `ROUTIER`, `CASSE`, `PERTE`, `PAUSE_CAFE`, `DOUANE`
 
-```bash
-# unit tests
-$ pnpm run test
+## Données de test (seed)
 
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
-```
+| Email | Rôle | Mot de passe |
+| ----- | ---- | ------------ |
+| `admin@infflux.dev` | ADMIN | `admin123` |
+| `lina.martin@infflux.dev` | DELIVER | `deliver123` |
+| `samir.diallo@infflux.dev` | DELIVER | `deliver123` |
+| `claire.dubois@infflux.dev` | CUSTOMER | `customer123` |
+| `yassine.benali@infflux.dev` | CUSTOMER | `customer123` |

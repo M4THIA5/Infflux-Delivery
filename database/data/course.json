@@ -1,0 +1,29 @@
+[
+  {
+    "customerEmail": "claire.dubois@infflux.dev",
+    "delivererEmail": "lina.martin@infflux.dev",
+    "entrepotAddresse": "10 Rue de la Logistique, 75001 Paris",
+    "dateHeureDebut": "2026-04-20T09:00:00Z",
+    "dateHeureArrivee": "2026-04-20T11:30:00Z",
+    "prix": 45.50,
+    "adresseLivraison": "5 Avenue des Champs-Élysées, 75008 Paris"
+  },
+  {
+    "customerEmail": "yassine.benali@infflux.dev",
+    "delivererEmail": "samir.diallo@infflux.dev",
+    "entrepotAddresse": "42 Avenue du Commerce, 69001 Lyon",
+    "dateHeureDebut": "2026-04-21T14:00:00Z",
+    "dateHeureArrivee": null,
+    "prix": 32.00,
+    "adresseLivraison": "18 Rue Victor Hugo, 69002 Lyon"
+  },
+  {
+    "customerEmail": "claire.dubois@infflux.dev",
+    "delivererEmail": null,
+    "entrepotAddresse": "7 Boulevard Industriel, 13001 Marseille",
+    "dateHeureDebut": "2026-04-22T08:30:00Z",
+    "dateHeureArrivee": null,
+    "prix": 58.75,
+    "adresseLivraison": "3 Quai du Port, 13002 Marseille"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "courseIndex": 0,
+    "userEmail": "lina.martin@infflux.dev",
+    "type": "ROUTIER",
+    "commentaire": "Embouteillage important sur le périphérique, retard estimé de 45 minutes."
+  },
+  {
+    "courseIndex": 1,
+    "userEmail": "samir.diallo@infflux.dev",
+    "type": "CASSE",
+    "commentaire": "Un colis endommagé lors du chargement, client prévenu."
+  },
+  {
+    "courseIndex": 0,
+    "userEmail": "lina.martin@infflux.dev",
+    "type": "PAUSE_CAFE",
+    "commentaire": "Pause réglementaire de 20 minutes."
+  }
+]
