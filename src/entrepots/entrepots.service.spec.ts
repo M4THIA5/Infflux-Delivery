@@ -7,6 +7,8 @@ import { Entrepot } from './entrepot.entity';
 const mockEntrepot: Entrepot = {
   id: 'uuid-1',
   addresse: '10 Rue de la Logistique, 75001 Paris',
+  latitude: null,
+  longitude: null,
   createdAt: new Date(),
   updatedAt: new Date(),
   courses: [],
