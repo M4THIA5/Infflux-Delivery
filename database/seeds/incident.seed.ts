@@ -26,7 +26,9 @@ export async function seedIncidents(
   for (const item of data) {
     const course = courses[item.courseIndex];
     if (!course) {
-      console.warn(`  ⚠️  courseIndex ${item.courseIndex} introuvable, incident ignoré`);
+      console.warn(
+        `  ⚠️  courseIndex ${item.courseIndex} introuvable, incident ignoré`,
+      );
       continue;
     }
 
