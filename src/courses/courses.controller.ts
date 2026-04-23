@@ -15,6 +15,8 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { AcceptCourseDto } from './dto/accept-course.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { User } from '../users/user.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('courses')
@@ -29,6 +31,11 @@ export class CoursesController {
     const course = await this.coursesService.create(dto);
     this.courseGateway.proposeCourse(course);
     return course;
+  }
+
+  @Get('mine')
+  findMine(@CurrentUser() user: User) {
+    return this.coursesService.findByCustomer(user.id);
   }
 
   @Get('nearby')

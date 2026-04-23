@@ -77,4 +77,12 @@ export class CoursesService {
   findPending(): Promise<Course[]> {
     return this.coursesRepository.find({ where: { delivererId: IsNull() } });
   }
+
+  findByCustomer(customerId: string): Promise<Course[]> {
+    return this.coursesRepository.find({
+      where: { customerId },
+      relations: ['deliverer', 'entrepot'],
+      order: { createdAt: 'DESC' },
+    });
+  }
 }
