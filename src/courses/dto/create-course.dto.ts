@@ -2,10 +2,13 @@ import {
   IsBoolean,
   IsDateString,
   IsEnum,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsUUID,
+  Max,
+  Min,
 } from 'class-validator';
 
 export type CourseStatus =
@@ -53,4 +56,10 @@ export class CreateCourseDto {
 
   @IsEnum(['SMALL', 'MEDIUM', 'LARGE', 'REFRIGERATED'])
   remorque: RemorqueType;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(5)
+  note?: number;
 }

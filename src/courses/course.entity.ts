@@ -59,6 +59,9 @@ export class Course {
   @Column({ type: 'boolean', default: true })
   isLegal: boolean;
 
+  @Column({ type: 'int', nullable: true })
+  note: number | null;
+
   @Column({ type: 'enum', enum: ['SMALL', 'MEDIUM', 'LARGE', 'REFRIGERATED'] })
   remorque: 'SMALL' | 'MEDIUM' | 'LARGE' | 'REFRIGERATED';
 
