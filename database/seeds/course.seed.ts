@@ -18,6 +18,7 @@ interface CourseSeedData {
   remorque: 'SMALL' | 'MEDIUM' | 'LARGE' | 'REFRIGERATED';
   status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
   isLegal?: boolean;
+  note?: number | null;
 }
 
 export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
@@ -91,6 +92,7 @@ export async function seedCourses(dataSource: DataSource): Promise<Course[]> {
         remorque: item.remorque,
         status: item.status ?? 'PENDING',
         isLegal: item.isLegal ?? true,
+        note: item.note ?? null,
       }),
     );
 

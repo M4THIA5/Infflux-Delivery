@@ -21,6 +21,34 @@
     "isActive": true
   },
   {
+    "role": "DELIVER",
+    "name": "Karim Ouali",
+    "email": "karim.ouali@infflux.dev",
+    "password": "deliver123",
+    "isActive": true
+  },
+  {
+    "role": "DELIVER",
+    "name": "Pauline Roux",
+    "email": "pauline.roux@infflux.dev",
+    "password": "deliver123",
+    "isActive": true
+  },
+  {
+    "role": "DELIVER",
+    "name": "Théo Garnier",
+    "email": "theo.garnier@infflux.dev",
+    "password": "deliver123",
+    "isActive": true
+  },
+  {
+    "role": "DELIVER",
+    "name": "Inès Konaté",
+    "email": "ines.konate@infflux.dev",
+    "password": "deliver123",
+    "isActive": false
+  },
+  {
     "role": "CUSTOMER",
     "name": "Claire Dubois",
     "email": "claire.dubois@infflux.dev",
@@ -31,6 +59,34 @@
     "role": "CUSTOMER",
     "name": "Yassine Benali",
     "email": "yassine.benali@infflux.dev",
+    "password": "customer123",
+    "isActive": true
+  },
+  {
+    "role": "CUSTOMER",
+    "name": "Sophie Leroux",
+    "email": "sophie.leroux@infflux.dev",
+    "password": "customer123",
+    "isActive": true
+  },
+  {
+    "role": "CUSTOMER",
+    "name": "Antoine Moreau",
+    "email": "antoine.moreau@infflux.dev",
+    "password": "customer123",
+    "isActive": true
+  },
+  {
+    "role": "CUSTOMER",
+    "name": "Fatima Haddad",
+    "email": "fatima.haddad@infflux.dev",
+    "password": "customer123",
+    "isActive": true
+  },
+  {
+    "role": "CUSTOMER",
+    "name": "Marc Fontaine",
+    "email": "marc.fontaine@infflux.dev",
     "password": "customer123",
     "isActive": false
   }

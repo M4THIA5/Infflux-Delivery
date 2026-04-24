@@ -16,5 +16,71 @@
     "userEmail": "lina.martin@infflux.dev",
     "type": "PAUSE_CAFE",
     "commentaire": "Pause réglementaire de 20 minutes."
+  },
+  {
+    "courseIndex": 3,
+    "userEmail": "karim.ouali@infflux.dev",
+    "type": "ROUTIER",
+    "commentaire": "Travaux sur le boulevard périphérique, déviation obligatoire."
+  },
+  {
+    "courseIndex": 4,
+    "userEmail": "pauline.roux@infflux.dev",
+    "type": "PAUSE_CAFE",
+    "commentaire": "Pause déjeuner de 30 minutes à mi-parcours."
+  },
+  {
+    "courseIndex": 5,
+    "userEmail": "theo.garnier@infflux.dev",
+    "type": "CASSE",
+    "commentaire": "Palette endommagée lors du déchargement, photos transmises au responsable."
+  },
+  {
+    "courseIndex": 8,
+    "userEmail": "lina.martin@infflux.dev",
+    "type": "DOUANE",
+    "commentaire": "Contrôle douanier inopiné, attente de 1h15 avant validation des documents."
+  },
+  {
+    "courseIndex": 9,
+    "userEmail": "samir.diallo@infflux.dev",
+    "type": "ROUTIER",
+    "commentaire": "Accident sur l'A6, bouchon de 12 km, retard de 50 minutes."
+  },
+  {
+    "courseIndex": 10,
+    "userEmail": "karim.ouali@infflux.dev",
+    "type": "PERTE",
+    "commentaire": "Un colis manquant à la réception, déclaration effectuée auprès du responsable entrepôt."
+  },
+  {
+    "courseIndex": 11,
+    "userEmail": "pauline.roux@infflux.dev",
+    "type": "PAUSE_CAFE",
+    "commentaire": "Pause réglementaire, 15 minutes."
+  },
+  {
+    "courseIndex": 15,
+    "userEmail": "karim.ouali@infflux.dev",
+    "type": "ROUTIER",
+    "commentaire": "Grève des transports en commun, trafic dense sur les axes principaux."
+  },
+  {
+    "courseIndex": 17,
+    "userEmail": "samir.diallo@infflux.dev",
+    "type": "CASSE",
+    "commentaire": "Choc lors d'un freinage d'urgence, emballage extérieur abîmé, contenu intact."
+  },
+  {
+    "courseIndex": 18,
+    "userEmail": "pauline.roux@infflux.dev",
+    "type": "ROUTIER",
+    "commentaire": "Zone de travaux rue de la Paix, passage interdit aux poids lourds, itinéraire alternatif emprunté."
+  },
+  {
+    "courseIndex": 19,
+    "userEmail": "theo.garnier@infflux.dev",
+    "type": "DOUANE",
+    "commentaire": "Vérification des documents de transport à la frontière, tout en ordre après 30 minutes."
   }
 ]
