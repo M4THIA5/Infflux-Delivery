@@ -29,7 +29,6 @@ export class CoursesController {
   ) {}
 
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
   @Get()
   findAll() {
     return this.coursesService.findAll();
@@ -105,10 +104,7 @@ export class CoursesController {
   }
 
   @Post(':id/validate-code')
-  validateCode(
-    @Param('id') id: string,
-    @Body('code') code: string,
-  ) {
+  validateCode(@Param('id') id: string, @Body('code') code: string) {
     return this.coursesService.validateCode(id, code);
   }
 }
