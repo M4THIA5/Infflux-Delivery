@@ -96,6 +96,29 @@ export class CoursesService {
     return this.coursesRepository.save(course);
   }
 
+  async generateValidationCode(id: string): Promise<{ code: string }> {
+    const course = await this.findOne(id);
+    const code = String(Math.floor(10000 + Math.random() * 90000));
+    course.validationCode = code;
+    await this.coursesRepository.save(course);
+    return { code };
+  }
+
+  async validateCode(
+    id: string,
+    code: string,
+  ): Promise<{ valid: boolean }> {
+    const course = await this.findOne(id);
+    const valid = course.validationCode === code;
+    if (valid) {
+      course.status = 'COMPLETED';
+      course.dateHeureArrivee = new Date();
+      course.validationCode = null;
+      await this.coursesRepository.save(course);
+    }
+    return { valid };
+  }
+
   async confirmByCustomer(id: string, customerId: string): Promise<Course> {
     const course = await this.findOne(id);
 
@@ -149,6 +172,7 @@ export class CoursesService {
       .leftJoinAndSelect('course.customer', 'customer')
       .leftJoinAndSelect('course.deliverer', 'deliverer')
       .leftJoinAndSelect('course.entrepot', 'entrepot')
+      .leftJoinAndSelect('course.incidents', 'incidents')
       .where('course."delivererId" = :userId', { userId: user.id })
       .orderBy('course."createdAt"', 'DESC')
       .getMany();

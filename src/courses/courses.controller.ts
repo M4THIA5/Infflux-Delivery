@@ -98,4 +98,17 @@ export class CoursesController {
   refuse(@Param('id') id: string, @CurrentUser() user: User) {
     return this.coursesService.refuse(id, user.id);
   }
+
+  @Post(':id/generate-code')
+  generateCode(@Param('id') id: string) {
+    return this.coursesService.generateValidationCode(id);
+  }
+
+  @Post(':id/validate-code')
+  validateCode(
+    @Param('id') id: string,
+    @Body('code') code: string,
+  ) {
+    return this.coursesService.validateCode(id, code);
+  }
 }

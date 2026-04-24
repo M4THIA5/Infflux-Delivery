@@ -59,6 +59,9 @@ export class Course {
   @Column({ type: 'boolean', default: true })
   isLegal: boolean;
 
+  @Column({ type: 'char', length: 5, nullable: true })
+  validationCode: string | null;
+
   @Column({ type: 'int', nullable: true })
   note: number | null;
 
