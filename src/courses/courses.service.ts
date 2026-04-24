@@ -184,6 +184,42 @@ export class CoursesService {
     return this.coursesRepository.save(course);
   }
 
+  async getCustomerStats(customerId: string): Promise<{
+    avgNote: number | null;
+    totalCoursesEffectuees: number;
+    coursesEnRetard: number;
+  }> {
+    const courses = await this.coursesRepository.find({
+      where: { customerId },
+      select: ['id', 'status', 'note', 'dateHeureDebut'],
+    });
+
+    const completed = courses.filter((c) => c.status === 'COMPLETED');
+
+    const notedCourses = completed.filter((c) => c.note !== null);
+    const avgNote =
+      notedCourses.length > 0
+        ? Math.round(
+            (notedCourses.reduce((sum, c) => sum + (c.note as number), 0) /
+              notedCourses.length) *
+              10,
+          ) / 10
+        : null;
+
+    const now = new Date();
+    const coursesEnRetard = courses.filter(
+      (c) =>
+        (c.status === 'PENDING' || c.status === 'IN_PROGRESS') &&
+        new Date(c.dateHeureDebut) < now,
+    ).length;
+
+    return {
+      avgNote,
+      totalCoursesEffectuees: completed.length,
+      coursesEnRetard,
+    };
+  }
+
   async getMyStats(userId: string): Promise<{
     total: number;
     completed: number;

@@ -47,6 +47,13 @@ export class CoursesController {
     return this.coursesService.findMine(user);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.CUSTOMER)
+  @Get('mine/customer-stats')
+  getCustomerStats(@CurrentUser() user: User) {
+    return this.coursesService.getCustomerStats(user.id);
+  }
+
   @Get('nearby')
   findNearby(
     @Query('lat') lat: string,
