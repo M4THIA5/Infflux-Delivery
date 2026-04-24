@@ -4,10 +4,6 @@ meta {
   seq: 6
 }
 
-// Retourne { avgNote, totalCoursesEffectuees, coursesEnRetard }
-// avgNote          : moyenne des notes données (null si aucune note)
-// totalCoursesEffectuees : nombre de courses COMPLETED
-// coursesEnRetard  : courses PENDING/IN_PROGRESS dont la dateHeureDebut est dépassée
 get {
   url: {{baseUrl}}/courses/mine/customer-stats
   body: none
