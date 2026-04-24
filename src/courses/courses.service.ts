@@ -104,10 +104,7 @@ export class CoursesService {
     return { code };
   }
 
-  async validateCode(
-    id: string,
-    code: string,
-  ): Promise<{ valid: boolean }> {
+  async validateCode(id: string, code: string): Promise<{ valid: boolean }> {
     const course = await this.findOne(id);
     const valid = course.validationCode === code;
     if (valid) {
@@ -146,9 +143,7 @@ export class CoursesService {
     return this.coursesRepository.find({ where: { delivererId: IsNull() } });
   }
 
-  async findMine(
-    user: User,
-  ): Promise<
+  async findMine(user: User): Promise<
     | Course[]
     | {
         active: Course | null;
@@ -244,7 +239,7 @@ export class CoursesService {
     };
   }
 
-  async getMyStats(userId: string): Promise<{
+  async getDeliverStats(userId: string): Promise<{
     total: number;
     completed: number;
     cancelled: number;

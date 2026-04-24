@@ -47,6 +47,13 @@ export class CoursesController {
   }
 
   @UseGuards(RolesGuard)
+  @Roles(UserRole.DELIVER)
+  @Get('mine/deliver-stats')
+  getDeliverStats(@CurrentUser() user: User) {
+    return this.coursesService.getDeliverStats(user.id);
+  }
+
+  @UseGuards(RolesGuard)
   @Roles(UserRole.CUSTOMER)
   @Get('mine/customer-stats')
   getCustomerStats(@CurrentUser() user: User) {
